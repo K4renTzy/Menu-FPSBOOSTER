@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>FPS Booster Menu — Karentzy</title>
+    <style>
+        :root {
+            --bg: #0f1724;
+            --card: #0b1220;
+            --accent: #7c3aed;
+            --muted: #9aa6b2;
+            --glass: rgba(255,255,255,0.03)
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            background: linear-gradient(180deg,#071021 0%,#081428 60%);
+            color: #e6eef6
+        }
+
+        .wrap {
+            max-width: 980px;
+            margin: 28px auto;
+            padding: 18px
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            gap: 16px
+        }
+
+        h1 {
+            font-size: 20px;
+            margin: 0
+        }
+
+        p.lead {
+            margin: 6px 0 20px;
+            color: var(--muted)
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 18px
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 14px;
+            padding: 16px;
+            box-shadow: 0 6px 24px rgba(3,8,16,0.6)
+        }
+
+        .panel {
+            padding: 12px;
+            border-radius: 12px;
+            background: linear-gradient(180deg,rgba(255,255,255,0.02),transparent)
+        }
+
+        .big-stat {
+            font-size: 42px;
+            font-weight: 700;
+            line-height: 1;
+            margin: 4px 0
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .btn {
+            background: linear-gradient(90deg,var(--accent),#4f46e5);
+            border: none;
+            color: white;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer
+        }
+
+            .btn.ghost {
+                background: transparent;
+                border: 1px solid rgba(255,255,255,0.06)
+            }
+
+        .toggles {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: 10px;
+            background: var(--glass);
+            cursor: pointer
+        }
+
+        .slider {
+            width: 100%
+        }
+
+        .log {
+            height: 120px;
+            overflow: auto;
+            background: rgba(0,0,0,0.15);
+            padding: 8px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 13px
+        }
+
+        footer {
+            margin-top: 12px;
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .fps-bubble {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 120px;
+            height: 120px;
+            border-radius: 999px;
+            background: linear-gradient(180deg,rgba(255,255,255,0.02),transparent);
+            box-shadow: inset 0 -6px 12px rgba(0,0,0,0.4)
+        }
+
+        .small {
+            font-size: 12px
+        }
+
+        .real-tips {
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--muted)
+        }
+
+        .download {
+            margin-top: 10px
+        }
+
+        .notice {
+            background: linear-gradient(90deg,rgba(124,58,237,0.08),transparent);
+            padding: 10px;
+            border-radius: 10px;
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        @media (max-width:860px) {
+            .grid {
+                grid-template-columns: 1fr
+            }
+
+            .fps-bubble {
+                width: 96px;
+                height: 96px
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <header>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" fill="#1f2937" /><path d="M7.5 14.5C8.5 12.5 10 11 12 10C15 8.5 17 9.5 18.5 11.5" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            <div>
+                <h1>Menu FPS Booster Menu</h1>
+                <p class="lead">Work For Android, Ios, Emulator</p>
+            </div>
+        </header>
+
+        <div class="grid" style="margin-top:12px">
+            <div class="card">
+                <div style="display:flex;gap:12px;align-items:center">
+                    <div class="fps-bubble">
+                        <div>
+                            <div class="muted small">Estimated FPS</div>
+                            <div id="fps" class="big-stat">24</div>
+                            <div id="fps-change" class="muted small">Stable</div>
+                        </div>
+                    </div>
+                    <div style="flex:1">
+                        <div class="panel">
+                            <div style="display:flex;justify-content:space-between;align-items:center">
+                                <div>
+                                    <div class="muted small">Device</div>
+                                    <div id="device-name" style="font-weight:700">Unknown mobile device</div>
+                                </div>
+                                <div>
+                                    <button id="scanBtn" class="btn">Scan Device</button>
+                                </div>
+                            </div>
+                            <div style="margin-top:10px" class="muted small">Status log</div>
+                            <div id="log" class="log" aria-live="polite"></div>
+                        </div>
+
+                        <div style="margin-top:12px" class="controls">
+                            <div style="display:flex;gap:8px">
+                                <button id="boostBtn" class="btn">Boost</button>
+                                <button id="resetBtn" class="btn ghost">Reset</button>
+                            </div>
+
+                            <div class="toggles" style="margin-top:8px">
+                                <label class="toggle"><input id="perfMode" type="checkbox"> <span>Performance mode</span></label>
+                                <label class="toggle"><input id="clearRam" type="checkbox"> <span>Clear background</span></label>
+                                <label class="toggle"><input id="lowRes" type="checkbox"> <span>Lower resolution (sim.)</span></label>
+                            </div>
+
+                            <div style="margin-top:8px">
+                                <div class="muted small">Graphics level (simulated)</div>
+                                <input id="gfxRange" class="slider" type="range" min="0" max="100" value="70">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div style="margin-top:12px" class="real-tips card">
+                    <strong>Real tips (honest)</strong>
+                    <ul style="margin:8px 0 0; padding-left:18px;color:var(--muted)">
+                        <li>Close unused apps and browser tabs on mobile.</li>
+                        <li>Use lower in-game graphics settings and frame caps.</li>
+                        <li>Keep your OS and game updated; avoid overheating.</li>
+                    </ul>
+                </div>
+
+                <footer>
+                    <div class="notice">Please Do Not Close The App</div>
+                </footer>
+            </div>
+
+            <div class="card">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                    <div>
+                        <div class="muted small">Controls</div>
+                        <div style="font-weight:700">Fine tune the show</div>
+                    </div>
+                    <div style="text-align:right">
+                        <div class="muted small">Current load</div>
+                        <div id="cpu" style="font-weight:700">33%</div>
+                    </div>
+                </div>
+
+                <div style="margin-top:12px">
+                    <div class="muted small">Animation speed</div>
+                    <input id="animSpeed" class="slider" type="range" min="100" max="2000" value="900">
+                </div>
+
+                <div style="margin-top:12px">
+                    <div class="muted small">Simulation mode</div>
+                    <select id="simMode" style="width:100%;padding:8px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.04)">
+                        <option value="mild">Mild (casual)</option>
+                        <option value="game">Game (aggressive)</option>
+                        <option value="extreme">Extreme (max boost)</option>
+                    </select>
+                </div>
+
+                <div style="margin-top:12px">
+                    <div class="muted small">Logs & share</div>
+                    <div style="display:flex;gap:8px;margin-top:8px">
+                        <button id="copyLog" class="btn ghost">Copy Log</button>
+                        <button id="download" class="btn">Download HTML</button>
+                    </div>
+                </div>
+
+                <div style="margin-top:12px" class="panel small muted">
+                    Build By @27Karentzy
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // GIMMICK: This script simulates scanning and boosting FPS.
+        const fpsEl = document.getElementById('fps');
+        const fpsChange = document.getElementById('fps-change');
+        const logEl = document.getElementById('log');
+        const deviceName = document.getElementById('device-name');
+        const cpuEl = document.getElementById('cpu');
+        const scanBtn = document.getElementById('scanBtn');
+        const boostBtn = document.getElementById('boostBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const copyLog = document.getElementById('copyLog');
+        const downloadBtn = document.getElementById('download');
+
+        let baseFPS = 24;
+        let currentFPS = baseFPS;
+        let animInterval = null;
+        let running = false;
+
+        function log(t) { const time = new Date().toLocaleTimeString(); logEl.innerText = `[${time}] ${t}\n` + logEl.innerText }
+
+        function detectDevice() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            let name = 'Unknown mobile device';
+            if (/Android/i.test(ua)) name = 'Android device';
+            else if (/iPhone|iPad|iPod/i.test(ua)) name = 'iOS device';
+            else if (/Windows Phone/i.test(ua)) name = 'Windows Phone';
+            const extra = (navigator.platform || '').replace(/\b(Win|Mac|Linux)\b/, '')
+            deviceName.innerText = name + (extra ? (' — ' + extra) : '');
+            log('Device detected: ' + name);
+        }
+
+        function startAnim() {
+            const speed = parseInt(document.getElementById('animSpeed').value);
+            if (animInterval) clearInterval(animInterval);
+            animInterval = setInterval(() => {
+                // slowly drift currentFPS toward target
+                const target = baseFPS;
+                const delta = (target - currentFPS) * 0.12;
+                currentFPS = Math.round(currentFPS + delta + (Math.random() - 0.5) * 2);
+                fpsEl.innerText = Math.max(1, currentFPS);
+                cpuEl.innerText = Math.max(5, Math.min(98, Math.round(60 - (currentFPS - baseFPS) + Math.random() * 10))) + '%';
+            }, Math.max(60, speed / 20));
+        }
+
+        function scan() {
+            log('Starting quick scan...');
+            scanBtn.disabled = true; scanBtn.innerText = 'Scanning...';
+            let steps = ['Checking CPU', 'Checking GPU', 'Inspecting background apps', 'Reading thermal sensors', 'Estimating baseline FPS'];
+            let i = 0;
+            const s = setInterval(() => {
+                if (i < steps.length) { log(steps[i]); i++; }
+                else {
+                    clearInterval(s); scanBtn.disabled = false; scanBtn.innerText = 'Scan Device';
+                    baseFPS = 20 + Math.round(Math.random() * 40); currentFPS = baseFPS; fpsEl.innerText = currentFPS; log('Scan complete — baseline FPS: ' + baseFPS);
+                }
+            }, 600);
+        }
+
+        function boost() {
+            if (running) { log('Already boosting.'); return; }
+            running = true; boostBtn.innerText = 'Boosting...';
+            const perf = document.getElementById('perfMode').checked;
+            const clear = document.getElementById('clearRam').checked;
+            const lowRes = document.getElementById('lowRes').checked;
+            const gfx = parseInt(document.getElementById('gfxRange').value);
+            const mode = document.getElementById('simMode').value;
+
+            log('Applying boost profile: ' + mode);
+            if (perf) log('Performance mode: ON');
+            if (clear) log('Attempting to clear background tasks (simulated)');
+            if (lowRes) log('Lowering resolution (simulated)');
+
+            // simulated effect on baseFPS
+            let gain = 0;
+            if (mode === 'mild') gain = 6;
+            if (mode === 'game') gain = 14;
+            if (mode === 'extreme') gain = 28;
+            // adjust by settings
+            gain += Math.round((100 - gfx) / 20);
+            if (perf) gain += 6;
+            if (clear) gain += 8;
+            if (lowRes) gain += 10;
+
+            const targetFPS = baseFPS + gain;
+            let step = 0;
+            const duration = 3000; // 3s buildup
+            const frames = 30;
+            const interval = duration / frames;
+            const diff = targetFPS - currentFPS;
+
+            const p = setInterval(() => {
+                step++;
+                currentFPS = Math.round(currentFPS + diff / frames);
+                fpsEl.innerText = currentFPS;
+                fpsChange.innerText = (currentFPS - baseFPS) > 0 ? '+' + (currentFPS - baseFPS) + ' fps' : 'Stable';
+                if (step >= frames) { clearInterval(p); running = false; boostBtn.innerText = 'Boost'; log('Boost complete — simulated FPS now: ' + currentFPS); }
+            }, interval);
+        }
+
+        function reset() {
+            currentFPS = baseFPS; fpsEl.innerText = currentFPS; fpsChange.innerText = 'Stable'; log('Reset to baseline');
+        }
+
+        scanBtn.addEventListener('click', scan);
+        boostBtn.addEventListener('click', boost);
+        resetBtn.addEventListener('click', reset);
+        copyLog.addEventListener('click', () => { navigator.clipboard.writeText(logEl.innerText).then(() => log('Log copied to clipboard')) });
+
+        document.getElementById('animSpeed').addEventListener('input', startAnim);
+        document.getElementById('gfxRange').addEventListener('input', () => log('Graphics slider: ' + document.getElementById('gfxRange').value));
+
+        // Download this page (save as HTML)
+        downloadBtn.addEventListener('click', () => {
+            const html = `<!doctype html>\n${document.documentElement.outerHTML}`;
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'Menu-FPSBOOSTER.html'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+        });
+
+        // initial setup
+        detectDevice(); startAnim(); log('Ready. Tap Scan to begin.');
+
+        // accessibility: focus on important buttons
+        scanBtn.setAttribute('aria-label', 'Scan device for baseline performance');
+        boostBtn.setAttribute('aria-label', 'Simulate boosting FPS');
+    </script>
+</body>
+</html>
